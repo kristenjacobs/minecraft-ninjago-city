@@ -28,7 +28,7 @@ Start mincraft, create a new flat world with no structures, then
 from inside minecraft type
 
 ```
-/py ninjago_city.py
+/py ninjago_city
 ```
 
 Step back and enjoy!
