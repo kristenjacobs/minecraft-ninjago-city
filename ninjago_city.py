@@ -18,8 +18,8 @@ BLOCK_LENGTH_X = (TOWERS_PER_BLOCK_X * TOWER_SIZE) + (TOWERS_PER_BLOCK_X * (2 * 
 BLOCK_LENGTH_Z = (TOWERS_PER_BLOCK_Z * TOWER_SIZE) + (TOWERS_PER_BLOCK_Z * (2 * TOWER_BORDER))
 
 # City dimentions
-BLOCKS_X = 15
-BLOCKS_Z = 15
+BLOCKS_X = 10
+BLOCKS_Z = 10
 BLOCK_GAP = 7
 OUTER_BLOCKS = 5
 
@@ -77,7 +77,16 @@ def fill_glass_vertical_fixed_z(minecraft, x, y, z, size, gap):
         vertical_square_fixed_z(minecraft, x + 1 + i, y + 1 + i, z, blk, size - 2 - i)
 
 
-def build_tower(minecraft, x, y, z, height, size, inner_size, gap):
+def build_tower(minecraft, x, y, z, height, size, inner_size, gap, layer):
+    # Scale the params based on the layer. 
+    for l in range(0, layer):
+        y = y + (height * (size - 1 - (l * 2)))
+    
+    size -= (layer * 2)
+    inner_size -= (layer * 2)
+    x += layer
+    z += layer
+
     outer_blk = block.NETHERRACK
     inner_blk = block.PRISMARINE
     for i in range(0, height):
@@ -145,7 +154,10 @@ def _generate_towers(minecraft, start_x, start_y, start_z):
                          block["x"], block["z"],
                          tower["x"], tower["z"],
                          TOWER_SIZE, TOWER_BORDER)
-            build_tower(minecraft, x, start_y, z, tower["height"], TOWER_SIZE, INNER_SIZE, GAP)
+            build_tower(minecraft, x, start_y, z, tower["height"], TOWER_SIZE, INNER_SIZE, GAP, 0)
+            build_tower(minecraft, x, start_y, z, tower["height"], TOWER_SIZE, INNER_SIZE, GAP, 1)
+            build_tower(minecraft, x, start_y, z, tower["height"], TOWER_SIZE, INNER_SIZE, GAP, 2)
+            build_tower(minecraft, x, start_y, z, tower["height"], TOWER_SIZE, INNER_SIZE, GAP, 3)
 
 
 def _generate_roads(minecraft, start_x, start_y, start_z):
